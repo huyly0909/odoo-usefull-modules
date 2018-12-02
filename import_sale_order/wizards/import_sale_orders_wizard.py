@@ -141,7 +141,7 @@ class ImportSaleOrderWizard(models.TransientModel):
         obj_id = env.search([('name', '=', name)], limit=1).id
         if obj_id:
             return obj_id
-        raise UserError(_("%s is not exist" % default_code))
+        raise UserError(_("%s is not exist" % name))
 
     @api.model
     def ensure_product_id(
