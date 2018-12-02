@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="import_sale_orders_wizard_form" model="ir.ui.view">
+        <field name="name">import.sale.orders.wizard.form</field>
+        <field name="model">import.sale.orders.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <h1>Import sale orders by excel file.</h1>
+                <group>
+                    <field name="excel_file"/>
+                </group>
+                <footer>
+                    <button name="action_import_sale_orders"
+                            string="Import"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Close" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="import_sale_orders_action" model="ir.actions.act_window">
+        <field name="name">Import Sale Orders</field>
+        <field name="res_model">import.sale.orders.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_import_sale_orders"
+        action="import_sale_orders_action"
+        parent="sale.sale_order_menu"
+        sequence="999"
+        groups="sales_team.group_sale_salesman"/>
+
+</odoo>
