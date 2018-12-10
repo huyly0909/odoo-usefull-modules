@@ -78,32 +78,35 @@ class ImportSaleOrderWizard(models.TransientModel):
             is_last_row = curr_row == (total_rows - 1)
             if current_client_order_ref != client_order_ref or is_last_row:
                 if is_last_row:
+                    row = curr_row
                     products, order_lines = \
-                        self.ensure_order_line(sheet, curr_row, col, product_product_env, products, order_lines)
+                        self.ensure_order_line(sheet, row, col, product_product_env, products, order_lines)
+                else:
+                    row = curr_row - 1
                 # convert to correct time format
                 date_order = \
                     fields.datetime.strptime(
                         sheet.cell_value(
-                            curr_row, col['date_order']), '%m/%d/%Y'
+                            row, col['date_order']), '%m/%d/%Y'
                     ).strftime('%Y-%m-%d %H:%M:%S')
                 # ensure partner_id
-                partner_name = sheet.cell_value(curr_row, col['partner_id'])
+                partner_name = sheet.cell_value(row, col['partner_id'])
                 if partner_name not in partners:
                     partners[partner_name] = self.ensure_id(res_partner_env, partner_name)
                 # ensure pricelist_id
-                pricelist_name = sheet.cell_value(curr_row, col['pricelist_id'])
+                pricelist_name = sheet.cell_value(row, col['pricelist_id'])
                 if pricelist_name not in pricelists:
                     pricelists[pricelist_name] = self.ensure_id(product_pricelist_env, pricelist_name)
                 # ensure warehouse_id
-                warehouses_name = sheet.cell_value(curr_row, col['warehouse_id'])
+                warehouses_name = sheet.cell_value(row, col['warehouse_id'])
                 if warehouses_name not in warehouses:
                     warehouses[warehouses_name] = self.ensure_id(stock_warehouse_env, warehouses_name)
                 # ensure user_id
-                user_name = sheet.cell_value(curr_row, col['user_id'])
+                user_name = sheet.cell_value(row, col['user_id'])
                 if user_name not in users:
                     users[user_name] = self.ensure_id(res_users_env, user_name)
                 # ensure team_id
-                team_name = sheet.cell_value(curr_row, col['team_id'])
+                team_name = sheet.cell_value(row, col['team_id'])
                 if team_name not in teams:
                     teams[team_name] = self.ensure_id(crm_team_env, team_name)
                 sale_order_env.create({
